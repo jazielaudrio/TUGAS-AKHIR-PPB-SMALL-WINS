@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-surface-100 text-gray-800 font-sans antialiased;
+    /* Menghilangkan highlight biru default saat tap di mobile */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Scrollbar cantik (opsional) */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+}
