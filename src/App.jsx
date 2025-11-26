@@ -5,37 +5,43 @@ import Home from './pages/Home';
 import WinDetail from './pages/WinDetail';
 import PostWin from './pages/PostWin';
 import About from './pages/About';
+import StressRelief from './pages/StressRelief'; // <--- 1. Import Halaman Game
 
-// Jika kamu belum membuat file Categories, kita pakai placeholder dulu agar tidak error
+// Placeholder Kategori
 const CategoriesPlaceholder = () => (
-  <div className="text-center mt-10">
-    <h2 className="text-xl font-bold">Kategori</h2>
-    <p>Fitur filter kategori akan muncul di sini.</p>
+  <div className="text-center mt-10 px-4">
+    <h2 className="text-xl font-bold text-gray-800">Kategori</h2>
+    <p className="text-gray-500">Fitur filter kategori akan segera hadir.</p>
   </div>
 );
 
 function App() {
   return (
     <Routes>
-      {/* Route Induk menggunakan Layout (Header & Bottom Nav) */}
+      {/* GROUP 1: Halaman yang memakai Layout (Header & Bottom Nav) */}
       <Route path="/" element={<Layout />}>
         
-        {/* Halaman Utama (List Kemenangan) */}
+        {/* Halaman Utama */}
         <Route index element={<Home />} />
         
-        {/* Halaman Detail Kemenangan (Dynamic Route dengan ID) */}
+        {/* Halaman Detail */}
         <Route path="win/:id" element={<WinDetail />} />
         
         {/* Halaman Kategori */}
         <Route path="categories" element={<CategoriesPlaceholder />} />
         
-        {/* Halaman Posting Kemenangan */}
+        {/* Halaman Posting */}
         <Route path="post" element={<PostWin />} />
         
         {/* Halaman About */}
         <Route path="about" element={<About />} />
         
       </Route>
+
+      {/* GROUP 2: Halaman Fullscreen (Tanpa Layout/Navigasi) */}
+      {/* Ini agar game terasa lebih immersive */}
+      <Route path="/play" element={<StressRelief />} />
+
     </Routes>
   );
 }
