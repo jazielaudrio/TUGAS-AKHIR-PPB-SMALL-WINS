@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, format } from 'date-fns'; // Tambah import 'format'
 import { id } from 'date-fns/locale';
-// Import icon tambahan untuk banner game
+// Import icon tambahan
 import { SparklesIcon } from '@heroicons/react/24/solid';
+import { CalendarDaysIcon } from '@heroicons/react/24/outline'; // Tambah import CalendarDaysIcon
 
 // Warna kategori yang lebih "Google Style" (Pastel)
 const getCategoryStyle = (category) => {
@@ -33,13 +34,20 @@ const Home = () => {
 
   return (
     <div className="pb-24 pt-4 px-4 max-w-md mx-auto">
-      {/* Header dengan Avatar sederhana */}
+      {/* Header dengan Date Pill (Opsi 2) */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Hello, Champ! 👋</h1>
           <p className="text-gray-500 text-sm">Rayakan hal kecil hari ini.</p>
         </div>
-        <div className="h-10 w-10 bg-gradient-to-tr from-primary to-purple-500 rounded-full shadow-lg border-2 border-white"></div>
+        
+        {/* Penunjuk Tanggal Hari Ini */}
+        <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <CalendarDaysIcon className="h-5 w-5 text-gray-400" />
+          <span className="text-sm font-bold text-gray-600">
+            {format(new Date(), 'dd MMM', { locale: id })}
+          </span>
+        </div>
       </div>
 
       {/* --- BANNER GAME STRESS RELIEF --- */}
