@@ -20,6 +20,16 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { id as indoLocale } from 'date-fns/locale';
 
+// --- TAMBAHAN: Fungsi helper untuk warna kategori (Sama seperti di Home.jsx) ---
+const getCategoryStyle = (category) => {
+  switch(category) {
+    case 'Pekerjaan': return 'bg-blue-100 text-blue-700 border-blue-200';
+    case 'Belajar': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+    case 'Kesehatan': return 'bg-rose-100 text-rose-700 border-rose-200';
+    default: return 'bg-violet-100 text-violet-700 border-violet-200';
+  }
+};
+
 const WinDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,9 +62,8 @@ const WinDetail = () => {
 
   // 2. Fetch Komentar secara REAL-TIME (Live Update)
   useEffect(() => {
-    // Kita subscribe ke sub-collection 'comments' di dalam dokumen win ini
     const commentsRef = collection(db, 'wins', id, 'comments');
-    const q = query(commentsRef, orderBy('timestamp', 'asc')); // Urutkan dari yang terlama
+    const q = query(commentsRef, orderBy('timestamp', 'asc')); 
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const commentsData = snapshot.docs.map(doc => ({
@@ -64,7 +73,7 @@ const WinDetail = () => {
       setComments(commentsData);
     });
 
-    return () => unsubscribe(); // Bersihkan listener saat keluar halaman
+    return () => unsubscribe(); 
   }, [id]);
 
   // Fungsi Kirim Komentar
@@ -74,14 +83,12 @@ const WinDetail = () => {
 
     setIsSending(true);
     try {
-      // Masukkan ke sub-collection
       await addDoc(collection(db, 'wins', id, 'comments'), {
         text: newComment,
         timestamp: serverTimestamp(),
-        // Kita kasih avatar random biar berwarna
         avatarColor: ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 'bg-pink-500'][Math.floor(Math.random() * 5)]
       });
-      setNewComment(""); // Kosongkan input
+      setNewComment(""); 
     } catch (error) {
       alert("Gagal kirim komentar");
     }
@@ -105,7 +112,8 @@ const WinDetail = () => {
       <div className={`p-8 rounded-3xl shadow-lg border border-gray-100 bg-white relative overflow-hidden mb-8`}>
         <div className={`absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-50`}></div>
         
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-gray-100 text-gray-500 mb-4">
+        {/* --- PERBAIKAN DI SINI: Menggunakan getCategoryStyle --- */}
+        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase border mb-4 ${getCategoryStyle(win.category)}`}>
           {win.category}
         </span>
         
@@ -127,7 +135,7 @@ const WinDetail = () => {
       </div>
 
       {/* --- BAGIAN KOMENTAR --- */}
-      <div className="mb-24"> {/* Tambah margin bottom agar konten paling bawah tidak tertutup input */}
+      <div className="mb-24"> 
         <h3 className="flex items-center text-lg font-bold text-gray-800 mb-4">
           <ChatBubbleLeftRightIcon className="w-5 h-5 mr-2 text-primary"/>
           Komentar ({comments.length})
@@ -160,7 +168,6 @@ const WinDetail = () => {
       </div>
 
       {/* --- INPUT KOMENTAR (Sticky di Bawah) --- */}
-      {/* PERBAIKAN: z-[60] agar di atas Bottom Nav (yang biasanya z-50) */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 pb-safe-area z-[60]">
         <div className="max-w-md mx-auto">
             <form onSubmit={handleSendComment} className="flex items-center gap-2">
